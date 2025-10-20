@@ -1,6 +1,6 @@
 from __future__ import annotations
+
 import httpx
-from typing import Optional
 
 GEO_URL = "https://geocoding-api.open-meteo.com/v1/search"
 FORECAST_URL = "https://api.open-meteo.com/v1/forecast"
@@ -24,7 +24,7 @@ async def daily_forecast(
     client: httpx.AsyncClient,
     lat: float,
     lon: float,
-    tz: Optional[str] = None,
+    tz: str | None = None,
     units: str = "metric",
 ) -> dict:
     temp_unit = "celsius" if units == "metric" else "fahrenheit"

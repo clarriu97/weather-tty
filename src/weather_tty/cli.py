@@ -1,23 +1,23 @@
 from __future__ import annotations
+
 import asyncio
-from typing import Optional
 
 import httpx
 import typer
 from rich import print as rprint
 from rich.panel import Panel
 
-from .api import geocode_city, daily_forecast, WeatherError
-from .formatting import format_line, code_to_emoji
+from .api import WeatherError, daily_forecast, geocode_city
+from .formatting import code_to_emoji, format_line
 
 app = typer.Typer(add_completion=False, no_args_is_help=True, help="Print today's weather for your terminal.")
 
 @app.command()
 def today(
-    city: Optional[str] = typer.Option(None, "--city", "-c", help="City name (uses Open-Meteo geocoding)"),
-    lat: Optional[float] = typer.Option(None, help="Latitude (overrides --city)"),
-    lon: Optional[float] = typer.Option(None, help="Longitude (overrides --city)"),
-    tz: Optional[str] = typer.Option(None, "--timezone", help="IANA timezone, default auto"),
+    city: str | None = typer.Option(None, "--city", "-c", help="City name (uses Open-Meteo geocoding)"),
+    lat: float | None = typer.Option(None, help="Latitude (overrides --city)"),
+    lon: float | None = typer.Option(None, help="Longitude (overrides --city)"),
+    tz: str | None = typer.Option(None, "--timezone", help="IANA timezone, default auto"),
     units: str = typer.Option("metric", "--units", "-u", help="metric|imperial"),
     no_emoji: bool = typer.Option(False, "--no-emoji", help="Disable emoji"),
     verbose: bool = typer.Option(False, "--verbose", "-v", help="Show a nice panel instead of plain line"),
@@ -61,9 +61,9 @@ def today(
 
             except WeatherError as e:
                 rprint(f"[red]error:[/red] {e}")
-                raise typer.Exit(1)
+                raise typer.Exit(1) from None
             except httpx.HTTPError as e:
                 rprint(f"[red]network error:[/red] {e}")
-                raise typer.Exit(1)
+                raise typer.Exit(1) from None
 
     asyncio.run(_run())
