@@ -1,5 +1,6 @@
 from weather_tty.formatting import code_to_emoji, format_line
 
+
 def test_code_to_emoji_known():
     assert code_to_emoji(0) == "☀️"
 

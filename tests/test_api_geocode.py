@@ -1,7 +1,9 @@
-import respx
 import httpx
 import pytest
-from weather_tty.api import geocode_city, GEO_URL, WeatherError
+import respx
+
+from weather_tty.api import GEO_URL, WeatherError, geocode_city
+
 
 @respx.mock
 @pytest.mark.anyio
@@ -17,6 +19,7 @@ async def test_geocode_city_ok():
     assert route.called
     assert name.startswith("Pamplona")
     assert lat and lon
+
 
 @respx.mock
 @pytest.mark.anyio
