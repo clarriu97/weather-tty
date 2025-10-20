@@ -35,6 +35,7 @@ dev = [
   "ruff>=0.5",
   "respx>=0.21",
   "anyio>=4.4",
+  "trio>=0.31.0",
 ]
 
 [build-system]
