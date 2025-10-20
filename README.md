@@ -5,8 +5,8 @@
 </p>
 
 <p align="center">
-  <a href="https://github.com/tuusuario/weather-tty/actions/workflows/ci.yml">
-    <img src="https://github.com/tuusuario/weather-tty/actions/workflows/ci.yml/badge.svg" alt="CI Status">
+  <a href="https://github.com/clarriu97/weather-tty/actions/workflows/ci.yml">
+    <img src="https://github.com/clarriu97/weather-tty/actions/workflows/ci.yml/badge.svg" alt="CI Status">
   </a>
   <a href="https://pypi.org/project/weather-tty/">
     <img src="https://img.shields.io/pypi/v/weather-tty.svg?color=blue&logo=pypi&logoColor=white" alt="PyPI">
@@ -20,8 +20,8 @@
   <a href="https://github.com/astral-sh/ruff">
     <img src="https://img.shields.io/badge/code%20style-ruff-black?logo=ruff&logoColor=white" alt="Code style: Ruff">
   </a>
-  <a href="https://codecov.io/gh/tuusuario/weather-tty">
-    <img src="https://img.shields.io/codecov/c/github/tuusuario/weather-tty?logo=codecov&logoColor=white&color=ff69b4" alt="Coverage">
+  <a href="https://codecov.io/gh/clarriu97/weather-tty">
+    <img src="https://img.shields.io/codecov/c/github/clarriu97/weather-tty?logo=codecov&logoColor=white&color=ff69b4" alt="Coverage">
   </a>
 </p>
 
@@ -67,8 +67,7 @@ weather-tty today --city "Pamplona" --verbose
 uv sync
 uv sync --group dev
 uv run ruff check .
+uv run ruff check . --fix
 uv run pytest
 uv run weather-tty today --city "Pamplona"
 ```
-
-
