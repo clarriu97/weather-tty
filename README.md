@@ -11,18 +11,27 @@
   <a href="https://pypi.org/project/weather-tty/">
     <img src="https://img.shields.io/pypi/v/weather-tty.svg?color=blue&logo=pypi&logoColor=white" alt="PyPI">
   </a>
-  <a href="https://pypi.org/project/weather-tty/">
-    <img src="https://img.shields.io/pypi/pyversions/weather-tty.svg?logo=python&logoColor=white" alt="Python Versions">
-  </a>
   <a href="https://opensource.org/licenses/MIT">
     <img src="https://img.shields.io/badge/license-MIT-green.svg" alt="License">
   </a>
   <a href="https://github.com/astral-sh/ruff">
     <img src="https://img.shields.io/badge/code%20style-ruff-black?logo=ruff&logoColor=white" alt="Code style: Ruff">
   </a>
-  <a href="https://codecov.io/gh/clarriu97/weather-tty">
-    <img src="https://img.shields.io/codecov/c/github/clarriu97/weather-tty?logo=codecov&logoColor=white&color=ff69b4" alt="Coverage">
-  </a>
+</p>
+<p align="center">
+  <img src="https://img.shields.io/badge/coverage-¯\_(ツ)_/¯-blueviolet?style=flat-square" alt="Coverage shrug">
+  <img src="https://img.shields.io/badge/build-success%20(usually,%20ask%20ChatGPT)-orange?style=flat-square" alt="Build success (usually, ask ChatGPT)">
+  <img src="https://img.shields.io/badge/type%20checked-LOL-red?style=flat-square" alt="Type checked LOL">
+  <img src="https://img.shields.io/badge/PRs-welcome%20(but%20judged)-yellow?style=flat-square" alt="PRs welcome (but judged)">
+  <img src="https://img.shields.io/badge/maintainer-sleep%20deprived-blue?style=flat-square" alt="Maintainer sleep deprived">
+  <img src="https://img.shields.io/badge/made%20with-%E2%9D%A4%20and%20Python-ff69b4?logo=python&logoColor=white&style=flat-square" alt="Made with love and Python">
+  <img src="https://img.shields.io/badge/runs%20on-UV-6E40C9?logo=astral&style=flat-square" alt="Runs on UV">
+  <img src="https://img.shields.io/badge/async-await%20all%20the%20things-007ec6?style=flat-square" alt="Async all the things">
+  <img src="https://img.shields.io/badge/emoji%20support-✅-brightgreen?style=flat-square" alt="Emoji support">
+  <img src="https://img.shields.io/badge/works%20on-my%20machine-lightgrey?style=flat-square" alt="Works on my machine">
+  <img src="https://img.shields.io/badge/built%20with-anger%20and%20coffee-brown?style=flat-square" alt="Built with anger and coffee">
+  <img src="https://img.shields.io/badge/weather-🌤️%20probably%20fine-blue?style=flat-square" alt="Weather probably fine">
+  <img src="https://img.shields.io/badge/terminal-approved-black?style=flat-square&logo=gnometerminal" alt="Terminal approved">
 </p>
 
 ## Features
