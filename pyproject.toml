@@ -1,0 +1,42 @@
+[project]
+name = "weather-tty"
+version = "0.1.0"
+description = "Tiny CLI to print today's weather for your terminal (Open-Meteo, zero API key)."
+readme = "README.md"
+requires-python = ">=3.10"
+license = { text = "MIT" }
+authors = [{ name = "Crack del universo" }]
+
+dependencies = [
+  "httpx>=0.27",
+  "typer>=0.12",
+  "rich>=13.7"
+]
+
+[project.scripts]
+weather-tty = "weather_tty.cli:app"
+
+[tool.uv]
+# python-preference = "managed"
+
+[tool.ruff]
+line-length = 150
+target-version = "py310"
+lint.select = ["E","F","I","UP","B","ARG","SIM","W","N","S","C90"]
+lint.ignore = ["E501"]
+
+[tool.pytest.ini_options]
+addopts = "-q"
+testpaths = ["tests"]
+
+[dependency-groups]
+dev = [
+  "pytest>=8.2",
+  "ruff>=0.5",
+  "respx>=0.21",
+  "anyio>=4.4",
+]
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
