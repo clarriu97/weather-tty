@@ -2,11 +2,24 @@ from __future__ import annotations
 
 import httpx
 
+
 GEO_URL = "https://geocoding-api.open-meteo.com/v1/search"
 FORECAST_URL = "https://api.open-meteo.com/v1/forecast"
 
+
 class WeatherError(RuntimeError):
     pass
+
+
+async def get_ip_location(client: httpx.AsyncClient) -> tuple[float, float, str]:
+    """Get approximate location from IP."""
+    r = await client.get("http://ip-api.com/json/", timeout=5)
+    r.raise_for_status()
+    data = r.json()
+    if data.get("status") != "success":
+        raise WeatherError("could not determine location from IP")
+    return float(data["lat"]), float(data["lon"]), f"{data['city']}, {data['countryCode']} (auto)"
+
 
 async def geocode_city(client: httpx.AsyncClient, query: str) -> tuple[float, float, str]:
     params = {"name": query, "count": 1, "language": "en", "format": "json"}
@@ -19,6 +32,7 @@ async def geocode_city(client: httpx.AsyncClient, query: str) -> tuple[float, fl
     hit = results[0]
     name = ", ".join(filter(None, [hit.get("name"), hit.get("country_code")]))
     return float(hit["latitude"]), float(hit["longitude"]), name
+
 
 async def daily_forecast(
     client: httpx.AsyncClient,

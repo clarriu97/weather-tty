@@ -1,10 +1,11 @@
 from __future__ import annotations
 
+
 WEATHERCODE_EMOJI = {
-    0: "☀️",   # Clear
+    0: "☀️",  # Clear
     1: "🌤️",  # Mainly clear
-    2: "⛅",   # Partly cloudy
-    3: "☁️",   # Overcast
+    2: "⛅",  # Partly cloudy
+    3: "☁️",  # Overcast
     45: "🌫️",  # Fog
     48: "🌫️",
     51: "🌦️",  # Drizzle light
@@ -31,8 +32,10 @@ WEATHERCODE_EMOJI = {
     99: "⛈️",
 }
 
+
 def code_to_emoji(code: int) -> str:
     return WEATHERCODE_EMOJI.get(int(code), "🌡️")
+
 
 def format_line(
     city_display: str,
