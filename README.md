@@ -36,32 +36,67 @@
 
 ## Features
 
-- Single-line output: `🌤️ Pamplona, ES: 25°C/12°C · rain 0.0mm · wind 18 km/h · sun 08:10–19:14`
-- `--city` geocoding (Open-Meteo) or `--lat/--lon`
-- Units: `metric` (default) or `imperial`
-- `--no-emoji` for boring terminals
-- `--verbose` pretty panel for humans
+- **Zero-config**: just type `weather-tty` and it will guess your city by IP.
+- Single-line summary: `🌤️ Pamplona, ES: 25°C/12°C · rain 0.0mm · wind 18 km/h · sun 08:10–19:14`
+- Multi-day forecast: `weather-tty --forecast` for a 5-day table.
+- `--city` geocoding (Open-Meteo) or `--lat/--lon`.
+- Units: `metric` (default) or `imperial`.
+- `--no-emoji` for boring terminals.
+- `--verbose` pretty panel for humans.
 
 ## Install
+
+> **Requires Python 3.10+**
+
+### Recommended (pipx)
+
+The easiest way to install `weather-tty` as a CLI tool:
+
+```bash
+brew install pipx  # if you don't have pipx
+pipx install weather-tty
+```
+
+This installs `weather-tty` in an isolated environment and makes it available globally.
+
+### Alternative (pip)
 
 ```bash
 pip install weather-tty
 ```
 
+> ⚠️ On macOS with Homebrew Python, you may get an `externally-managed-environment` error.
+> Use `pipx` instead, or create a virtual environment.
+
 ## Usage
 
 ```bash
+# auto-detect city by IP
+weather-tty
+
 # by city
-weather-tty today --city "Pamplona"
+weather-tty --city "Pamplona"
+
+# 5-day forecast table
+weather-tty --city "Pamplona" --forecast
 
 # coordinates (overrides city)
-weather-tty today --lat 40.4168 --lon -3.7038
+weather-tty --lat 40.4168 --lon -3.7038
 
 # imperial units
-weather-tty today --city "New York" --units imperial
+weather-tty --city "New York" --units imperial
 
 # pretty panel
-weather-tty today --city "Pamplona" --verbose
+weather-tty --city "Pamplona" --verbose
+```
+
+### Pro Tip: Terminal Greeting
+
+Add `weather-tty` to the end of your `.zshrc`, `.bashrc`, or `.bash_profile` to get a fresh weather report every time you open a new terminal session:
+
+```bash
+# Add this to ~/.zshrc or ~/.bashrc
+weather-tty
 ```
 
 ## Notes
@@ -78,5 +113,5 @@ uv sync --group dev
 uv run ruff check .
 uv run ruff check . --fix
 uv run pytest
-uv run weather-tty today --city "Pamplona"
+uv run weather-tty --city "Pamplona"
 ```
