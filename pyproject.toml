@@ -1,6 +1,6 @@
 [project]
 name = "weather-tty"
-version = "0.1.0"
+version = "0.2.1"
 description = "Tiny CLI to print today's weather for your terminal (Open-Meteo, zero API key)."
 readme = "README.md"
 requires-python = ">=3.10"
