@@ -5,4 +5,14 @@ build/
 dist/
 *.egg-info/
 .venv/
+
+# test / lint / type caches
 .pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.coverage
+.coverage.*
+htmlcov/
+
+# local editor / tooling config
+.claude/settings.local.json
