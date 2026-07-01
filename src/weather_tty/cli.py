@@ -6,13 +6,26 @@ import httpx
 import typer
 from rich import print as rprint
 from rich.panel import Panel
-from rich.table import Table
 
+from . import __version__
+from ._richfix import apply as _apply_richfix
 from .api import WeatherError, daily_forecast, geocode_city, get_ip_location
-from .formatting import code_to_emoji, format_line
+from .formatting import build_forecast_table, code_to_emoji, format_line
 
+
+# Make Rich measure emoji the way modern terminals render them, so --verbose
+# panels and --forecast tables keep their borders aligned.
+_apply_richfix()
 
 app = typer.Typer(add_completion=False, no_args_is_help=False, help="Print weather for your terminal.")
+
+FORECAST_DAYS = 5
+
+
+def _version_callback(value: bool) -> None:
+    if value:
+        rprint(f"weather-tty {__version__}")
+        raise typer.Exit()
 
 
 @app.command()
@@ -24,8 +37,11 @@ def main(
     units: str = typer.Option("metric", "--units", "-u", help="metric|imperial"),
     no_emoji: bool = typer.Option(False, "--no-emoji", help="Disable emoji"),
     verbose: bool = typer.Option(False, "--verbose", "-v", help="Show a nice panel instead of plain line"),
-    forecast: bool = typer.Option(False, "--forecast", "-f", help="Show 5-day forecast table"),
-):
+    forecast: bool = typer.Option(False, "--forecast", "-f", help="Show a 5-day forecast table"),
+    _version: bool = typer.Option(
+        False, "--version", callback=_version_callback, is_eager=True, help="Show version and exit"
+    ),
+) -> None:
     """
     Print today's weather or a 5-day forecast.
     """
@@ -33,7 +49,7 @@ def main(
         rprint("[red]invalid --units (use metric|imperial)[/red]")
         raise typer.Exit(2)
 
-    async def _run():
+    async def _run() -> None:
         async with httpx.AsyncClient(follow_redirects=True) as client:
             try:
                 if lat is not None and lon is not None:
@@ -43,61 +59,41 @@ def main(
                 else:
                     lat_, lon_, display = await get_ip_location(client)
 
-                data = await daily_forecast(client, lat_, lon_, tz=tz, units=units)
+                days = FORECAST_DAYS if forecast else 1
+                data = await daily_forecast(client, lat_, lon_, tz=tz, units=units, forecast_days=days)
                 d = data.get("daily") or {}
+                if not d.get("time"):
+                    raise WeatherError("no forecast data available")
 
-                if not forecast:
-                    # Single line today
-                    tmin = float(d["temperature_2m_min"][0])
-                    tmax = float(d["temperature_2m_max"][0])
-                    precip = float(d["precipitation_sum"][0])
-                    wmax = float(d.get("windspeed_10m_max", [0])[0])
-                    code = int(d["weathercode"][0])
-                    sunrise = d["sunrise"][0]
-                    sunset = d["sunset"][0]
-
-                    line = format_line(display, tmin, tmax, precip, wmax, sunrise, sunset, code, units, use_emoji=not no_emoji)
-
-                    if verbose:
-                        emoji = code_to_emoji(code) if not no_emoji else ""
-                        rprint(Panel.fit(line, title=f"weather-tty {emoji}"))
-                    else:
-                        print(line)
-                else:
-                    # Forecast table
-                    table = Table(title=f"Forecast: {display}")
-                    table.add_column("Date", style="cyan")
-                    table.add_column("Weather", justify="center")
-                    table.add_column("Temp", justify="right")
-                    table.add_column("Rain", justify="right")
-                    table.add_column("Wind", justify="right")
-
-                    unit_temp = "°C" if units == "metric" else "°F"
-                    unit_rain = "mm" if units == "metric" else "in"
-                    unit_wind = "km/h" if units == "metric" else "mph"
-
-                    for i in range(5):
-                        date = d["time"][i]
-                        tmin = float(d["temperature_2m_min"][i])
-                        tmax = float(d["temperature_2m_max"][i])
-                        precip = float(d["precipitation_sum"][i])
-                        wmax = float(d.get("windspeed_10m_max", [0])[i])
-                        code = int(d["weathercode"][i])
-
-                        emoji = code_to_emoji(code) if not no_emoji else ""
-                        rain_val = precip if units == "metric" else round(precip / 25.4, 2)
-
-                        table.add_row(
-                            date, f"{emoji}", f"{round(tmax)}/{round(tmin)}{unit_temp}", f"{rain_val}{unit_rain}", f"{round(wmax)} {unit_wind}"
-                        )
+                if forecast:
+                    table = build_forecast_table(display, d, units=units, use_emoji=not no_emoji, max_days=FORECAST_DAYS)
                     rprint(table)
+                    return
 
-            except Exception as e:
-                # Catch-all for better user experience but could be more specific
-                if isinstance(e, (WeatherError, httpx.HTTPError)):
-                    rprint(f"[red]error:[/red] {e}")
+                line = format_line(
+                    display,
+                    float(d["temperature_2m_min"][0]),
+                    float(d["temperature_2m_max"][0]),
+                    float(d["precipitation_sum"][0]),
+                    float((d.get("windspeed_10m_max") or [0])[0]),
+                    d["sunrise"][0],
+                    d["sunset"][0],
+                    int(d["weathercode"][0]),
+                    units,
+                    use_emoji=not no_emoji,
+                )
+
+                if verbose:
+                    emoji = code_to_emoji(int(d["weathercode"][0])) if not no_emoji else ""
+                    rprint(Panel.fit(line, title=f"weather-tty {emoji}"))
                 else:
-                    rprint(f"[red]error:[/red] {type(e).__name__}: {e}")
+                    print(line)
+
+            except (WeatherError, httpx.HTTPError) as e:
+                rprint(f"[red]error:[/red] {e}")
+                raise typer.Exit(1) from None
+            except Exception as e:  # last-resort guard so the CLI never dumps a traceback
+                rprint(f"[red]error:[/red] {type(e).__name__}: {e}")
                 raise typer.Exit(1) from None
 
     asyncio.run(_run())
