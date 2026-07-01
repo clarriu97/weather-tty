@@ -34,6 +34,12 @@
   <img src="https://img.shields.io/badge/terminal-approved-black?style=flat-square&logo=gnometerminal" alt="Terminal approved">
 </p>
 
+## Preview
+
+<p align="center">
+  <img src="https://raw.githubusercontent.com/clarriu97/weather-tty/master/docs/demo.svg" alt="weather-tty terminal output: single line, verbose panel and 5-day forecast table" width="720">
+</p>
+
 ## Features
 
 - **Zero-config**: just type `weather-tty` and it will guess your city by IP.
@@ -41,8 +47,10 @@
 - Multi-day forecast: `weather-tty --forecast` for a 5-day table.
 - `--city` geocoding (Open-Meteo) or `--lat/--lon`.
 - Units: `metric` (default) or `imperial`.
+- `--timezone` to override the auto-detected IANA timezone.
 - `--no-emoji` for boring terminals.
 - `--verbose` pretty panel for humans.
+- `--version` to print the installed version.
 
 ## Install
 
@@ -88,6 +96,12 @@ weather-tty --city "New York" --units imperial
 
 # pretty panel
 weather-tty --city "Pamplona" --verbose
+
+# override the timezone
+weather-tty --city "Pamplona" --timezone Europe/Madrid
+
+# print version
+weather-tty --version
 ```
 
 ### Pro Tip: Terminal Greeting
@@ -103,15 +117,16 @@ weather-tty
 
 - Data source: [Open-Meteo](https://open-meteo.com/)
 - No API keys required.
-- Prints today (index 0 of daily arrays). If you want multi-day, PRs welcome.
+- Default view is today's summary; pass `--forecast` for a 5-day table.
+- Location is resolved via IP by default; override with `--city` or `--lat/--lon`.
 
 ## Development
 
 ```bash
-uv sync
 uv sync --group dev
-uv run ruff check .
-uv run ruff check . --fix
-uv run pytest
+uv run ruff check .            # lint
+uv run ruff check . --fix      # autofix
+uv run ty check                # type check (Astral ty)
+uv run pytest --cov=weather_tty --cov-report=term-missing  # tests + coverage
 uv run weather-tty --city "Pamplona"
 ```
