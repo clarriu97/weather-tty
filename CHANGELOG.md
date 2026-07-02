@@ -5,6 +5,16 @@ All notable changes to this project are documented here.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.3.1] - 2026-07-02
+
+### Fixed
+- Startup crash on Rich >= 14.3 (`TypeError: get_character_cell_size() takes 1
+ positional argument but 2 were given`). Rich 14.3 gave `get_character_cell_size`
+ a second `unicode_version` argument and started measuring variation-selector
+ emoji (☀️ ☁️ 🌧️ …) as two cells natively. The emoji-width shim now detects when
+ Rich already measures them correctly and stays out of the way, and forwards any
+ extra arguments when it does patch older Rich releases.
+
 ## [0.3.0] - 2026-07-01
 
 ### Added
